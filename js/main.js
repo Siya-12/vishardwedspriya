@@ -555,26 +555,30 @@ const gc = [
   ['#dfe9d3', '#fbe3d3'],
   ['#fbe3d3', '#e9bcc4'],
   ['#f6d5d9', '#e4daf0'],
-  ['#fff3d6', '#f6d5d9']
+  ['#fff3d6', '#f6d5d9'],
+  ['#e4daf0', '#fff3d6']
 ];
 
-$('#grid').innerHTML = gc.map((c, i) => `
-  <button type="button" aria-label="Open photo ${i + 1}">
-    ${ph(c, 'public/images/gallery/' + (i + 1) + '.jpg', 'gallery/' + (i + 1) + '.jpg')}
-  </button>
-`).join('');
+$('#grid').innerHTML = gc.map((c, i) => {
+  const imagePath = i === 6
+    ? 'public/images/gallery/7.jpeg'
+    : 'public/images/gallery/' + (i + 1) + '.jpg';
 
+  const fallbackPath = i === 6
+    ? 'gallery/7.jpeg'
+    : 'gallery/' + (i + 1) + '.jpg';
 
+  return `
+    <button type="button" aria-label="Open photo ${i + 1}">
+      ${ph(c, imagePath, fallbackPath)}
+    </button>
+  `;
+}).join('');
 
+/* LOAD GALLERY IMAGES */
 
-/* LOAD IMAGES WHEN AVAILABLE */
-
-document.querySelectorAll('[data-img]').forEach(el => {
-  let path = el.dataset.img;
-
-  if (path.includes('mehendi-desktop.jpg')) {
-    path = 'public/images/gallery/mehendi-desktop.jpg';
-  }
+document.querySelectorAll('#grid [data-img]').forEach(el => {
+  const path = el.dataset.img;
 
   const im = new Image();
   im.alt = '';
@@ -582,17 +586,14 @@ document.querySelectorAll('[data-img]').forEach(el => {
 
   im.onload = () => {
     el.replaceChildren(im);
-    console.log('Image loaded successfully:', im.src);
   };
 
   im.onerror = () => {
-    console.error('Image failed to load:', im.src);
+    console.error('Gallery image failed to load:', path);
   };
 
   im.src = path;
 });
-
-
 
 /* FALLING PETALS */
 
