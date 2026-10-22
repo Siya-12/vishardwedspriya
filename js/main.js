@@ -686,23 +686,25 @@ function showInvitation() {
 }
 
 
-function startVideo() {
+
+async function startVideo() {
   if (videoStarted || invitationShown) return;
 
   videoStarted = true;
   clearTimeout(videoStartTimer);
 
-  // Start the music from the same tap that starts the video.
-  if (aud.paused) {
-    play();
-  }
+  // Start music immediately from the user's tap.
+  const musicPromise = aud.paused ? play() : Promise.resolve();
 
-  // Start the intro video without waiting for the music.
-  vid.play().catch(error => {
-    console.warn('The intro video could not start:', error);
+  // Start the video from the same tap.
+  const videoPromise = vid.play().catch(error => {
+    console.warn('Intro video could not start:', error);
     videoStarted = false;
   });
+
+  await Promise.allSettled([musicPromise, videoPromise]);
 }
+
 
 
 intro.addEventListener('pointerdown', startVideo);
