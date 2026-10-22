@@ -1,0 +1,2227 @@
+
+:root {
+  --blush: #efd9ca;
+  --peach: #f3e2cb;
+  --ivory: #faf1e2;
+  --gold: #a98a4a;
+  --gold2: #cdb683;
+  --sage: #858f70;
+  --rose: #b98a84;
+  --lav: #dfe5d3;
+  --cream: #f4e6d0;
+  --ink: #4a3338;
+  --ink2: #6e5358;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', system-ui, sans-serif;
+  --script: 'Pinyon Script', 'Snell Roundhand', cursive;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--ink);
+  font: 400 17px/1.7 var(--sans);
+  overflow-x: hidden;
+}
+
+body.lock {
+  overflow: hidden;
+  height: 100%;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.script {
+  font-family: var(--script);
+  color: var(--rose);
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   FALLING PETALS
+========================================= */
+
+#petals {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  top: -30px;
+  border-radius: 70% 0 70% 30%;
+  opacity: .8;
+  animation: fall linear infinite;
+  will-change: transform;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -5vh, 0) rotate(0);
+  }
+  25% {
+    transform: translate3d(var(--dx), 25vh, 0) rotate(120deg);
+  }
+  50% {
+    transform: translate3d(calc(var(--dx) * -.6), 55vh, 0) rotate(240deg);
+  }
+  75% {
+    transform: translate3d(var(--dx), 85vh, 0) rotate(330deg);
+  }
+  100% {
+    transform: translate3d(0, 112vh, 0) rotate(420deg);
+  }
+}
+
+body.nopetals #petals {
+  display: none;
+}
+
+/* =========================================
+   INTRO VIDEO
+========================================= */
+
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: opacity 1.4s ease, visibility 1.4s;
+}
+
+#intro.out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#intro video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+#intro::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(30, 12, 16, .4)
+  );
+  pointer-events: none;
+}
+
+/* Enter button — hidden by default.
+   The updated JavaScript should skip showing it. */
+
+#enter {
+  display: none !important;
+}
+
+#skip {
+  position: absolute;
+  z-index: 4;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  right: 16px;
+  background: none;
+  border: 0;
+  color: #fff6e4;
+  font: 300 .8rem var(--sans);
+  letter-spacing: .15em;
+  cursor: pointer;
+  opacity: .8;
+}
+
+#flash {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  pointer-events: none;
+  background: radial-gradient(circle, #fff3d6, #f6d5d9);
+  opacity: 0;
+}
+
+#flash.on {
+  animation: fl 1.6s ease;
+}
+
+@keyframes fl {
+  0% { opacity: 0; }
+  35% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* =========================================
+   MUSIC CONTROLS
+========================================= */
+
+#music {
+  position: fixed;
+  z-index: 60;
+  right: 14px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  display: none;
+  gap: 6px;
+  align-items: center;
+  background: rgba(255, 250, 243, .94);
+  border: 1px solid var(--gold2);
+  border-radius: 40px;
+  padding: 6px 8px;
+  box-shadow: 0 4px 18px rgba(120, 80, 60, .15);
+}
+
+#music.on {
+  display: flex;
+}
+
+#music button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 1.05rem;
+}
+
+#music button:hover {
+  background: var(--blush);
+}
+
+.eq {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 16px;
+  margin: 0 4px;
+}
+
+.eq i {
+  width: 3px;
+  background: var(--gold);
+  height: 4px;
+  border-radius: 2px;
+}
+
+.playing .eq i {
+  animation: eq 1s ease-in-out infinite;
+}
+
+.eq i:nth-child(2) {
+  animation-delay: .2s !important;
+}
+
+.eq i:nth-child(3) {
+  animation-delay: .4s !important;
+}
+
+@keyframes eq {
+  50% { height: 16px; }
+}
+
+/* =========================================
+   GENERAL LAYOUT
+========================================= */
+
+main {
+  display: none;
+}
+
+main.on {
+  display: block;
+}
+
+section {
+  position: relative;
+  padding: clamp(4rem, 9vw, 7rem) clamp(1.2rem, 5vw, 4rem);
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 4;
+}
+
+.center {
+  text-align: center;
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--gold);
+  margin: 1.2rem auto;
+}
+
+.rule::before,
+.rule::after {
+  content: "";
+  height: 1px;
+  width: 70px;
+  background: linear-gradient(90deg, transparent, var(--gold2));
+}
+
+.rule::after {
+  transform: scaleX(-1);
+}
+
+.mandala {
+  position: absolute;
+  pointer-events: none;
+  opacity: .14;
+  color: var(--gold);
+  width: min(520px, 90vw);
+  z-index: 0;
+}
+
+/* =========================================
+   SAGE GREEN INVITATION DOORS
+========================================= */
+
+#doors {
+  position: fixed;
+  inset: 0;
+  z-index: 48;
+  display: none;
+  overflow: hidden;
+  isolation: isolate;
+  background: #858e70;
+}
+
+#doors.on {
+  display: block;
+}
+
+#doors.gone {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease, visibility 1.2s;
+  pointer-events: none;
+}
+
+/* The two invitation panels */
+
+.panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2%;
+  z-index: 3;
+  overflow: hidden;
+  background-color: #858e70;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.07),
+      transparent 22%,
+      rgba(35,45,27,.035) 65%,
+      rgba(30,40,24,.13)
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='250' viewBox='0 0 220 250'%3E%3Cg fill='none' stroke='%23d8dcc3' stroke-opacity='.44' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M35 68C40 30 67 12 96 9C91 42 68 65 35 68Z'/%3E%3Cpath d='M35 68L85 19M56 48L50 36M68 36L78 43'/%3E%3Cpath d='M157 132C151 94 170 68 201 57C202 90 185 118 157 132Z'/%3E%3Cpath d='M157 132L190 70M172 105L165 92M180 90L191 98'/%3E%3Cpath d='M21 208C24 181 44 163 67 160C62 185 45 203 21 208Z'/%3E%3Cpath d='M21 208L57 166'/%3E%3Cpath d='M103 230C110 204 130 192 153 195C145 218 127 232 103 230Z'/%3E%3Cpath d='M103 230L145 199'/%3E%3Cpath d='M112 30C119 18 131 12 145 13C141 28 128 35 112 30Z'/%3E%3Cpath d='M112 30L139 16'/%3E%3C/g%3E%3C/svg%3E");
+
+  background-size: auto, 220px 250px;
+  border: 0;
+
+  transition:
+    transform 2.3s cubic-bezier(.76, 0, .24, 1),
+    box-shadow 2.3s ease;
+}
+
+.panel.l {
+  left: 0;
+  transform-origin: left center;
+  box-shadow:
+    inset -1px 0 rgba(235, 222, 186, .8),
+    inset -14px 0 24px rgba(28, 39, 23, .18);
+}
+
+.panel.r {
+  right: 0;
+  transform-origin: right center;
+  box-shadow:
+    inset 1px 0 rgba(235, 222, 186, .8),
+    inset 14px 0 24px rgba(28, 39, 23, .18);
+}
+
+/* Delicate gold borders */
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border: 1px solid rgba(235, 220, 179, .4);
+  pointer-events: none;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 17px;
+  border: 1px solid rgba(42, 53, 32, .13);
+  pointer-events: none;
+}
+
+/* Panels slide out from the centre */
+
+.open .panel {
+  transition-delay: .18s;
+}
+
+.open .panel.l {
+  transform: translateX(-101%);
+}
+
+.open .panel.r {
+  transform: translateX(101%);
+}
+
+/* Subtle edge folds */
+
+.cur {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2%;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(38, 48, 28, .3),
+      rgba(255, 255, 255, .06) 10%,
+      transparent 45%,
+      rgba(34, 44, 26, .12) 90%,
+      rgba(235, 221, 185, .38)
+    );
+
+  transition: transform 2.5s cubic-bezier(.76, 0, .24, 1);
+}
+
+.cur.l {
+  left: 0;
+  transform-origin: left center;
+  border-right: 1px solid rgba(234, 218, 179, .5);
+}
+
+.cur.r {
+  right: 0;
+  transform-origin: right center;
+  border-left: 1px solid rgba(234, 218, 179, .5);
+}
+
+.draw .cur.l {
+  transform: translateX(-96%) scaleX(.08);
+}
+
+.draw .cur.r {
+  transform: translateX(96%) scaleX(.08);
+}
+
+/* Gold centre seam */
+
+#doors::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  z-index: 4;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    rgba(45, 53, 34, .55),
+    rgba(239, 224, 188, .95),
+    rgba(45, 53, 34, .38)
+  );
+
+  box-shadow: 0 0 5px rgba(35, 43, 25, .2);
+  transition: opacity .4s ease;
+}
+
+#doors.open::after {
+  opacity: 0;
+}
+
+/* Cream scalloped seal */
+
+#seal {
+  position: absolute;
+  z-index: 6;
+  top: 50%;
+  left: 50%;
+  width: clamp(132px, 19vw, 176px);
+  aspect-ratio: 1;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+
+  filter: drop-shadow(0 7px 9px rgba(35, 40, 25, .25));
+
+  animation: sealBreath 3s ease-in-out infinite;
+
+  transition:
+    opacity .65s ease,
+    transform .85s cubic-bezier(.2, .8, .2, 1);
+}
+
+#seal svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+#seal:hover {
+  filter: drop-shadow(0 9px 13px rgba(35, 40, 25, .32));
+}
+
+#seal:focus-visible {
+  outline: 2px solid #f6e9d4;
+  outline-offset: 8px;
+}
+
+@keyframes sealBreath {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.035);
+  }
+}
+
+.open #seal {
+  animation: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.2) rotate(-8deg);
+  pointer-events: none;
+}
+
+/* Tap label */
+
+#tap {
+  position: absolute;
+  z-index: 6;
+  top: calc(50% + clamp(91px, 11vw, 113px));
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #f4ead5;
+
+  font-family: var(--sans);
+  font-size: .76rem;
+  font-weight: 400;
+  letter-spacing: .32em;
+  text-shadow: 0 1px 4px rgba(38, 43, 28, .4);
+
+  transition: opacity .45s ease, transform .45s ease;
+}
+
+.open #tap {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+/* =========================================
+   HERO SECTION
+========================================= */
+
+#hero {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 0, var(--peach), transparent 60%),
+    linear-gradient(var(--ivory), var(--blush) 140%);
+  overflow: hidden;
+  padding-inline: max(1.2rem, 11vw);
+  padding-top: 90px;
+}
+
+.drape {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8.5vw;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 0 0 22px rgba(90, 60, 30, .15);
+}
+
+.drape.l {
+  left: 0;
+}
+
+.drape.r {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.garland {
+  position: absolute;
+  top: 0;
+  width: min(150px, 22vw);
+  height: 100%;
+  opacity: .9;
+}
+
+.garland.l {
+  left: 0;
+}
+
+.garland.r {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.val {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 68px;
+  z-index: 2;
+}
+
+.bq {
+  position: absolute;
+  bottom: -6px;
+  width: min(200px, 38vw);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.bq.l {
+  left: 7vw;
+}
+
+.bq.r {
+  right: 7vw;
+  transform: scaleX(-1);
+}
+
+#hero .mandala {
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pre {
+  font: 300 .95rem var(--sans);
+  letter-spacing: .3em;
+  color: var(--ink2);
+}
+
+.names {
+  font-size: clamp(2.6rem, 9.5vw, 6.4rem);
+  letter-spacing: .04em;
+  margin: .4rem 0;
+}
+
+.names .amp {
+  display: block;
+  font: 400 clamp(2rem, 5vw, 3.4rem) var(--script);
+  color: var(--gold);
+  margin: .1em 0;
+}
+
+.names span.n {
+  display: block;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.rev .names span.n {
+  animation: in 1.6s .3s forwards;
+}
+
+.rev .names span.n + .amp + span.n {
+  animation-delay: 1.1s;
+}
+
+@keyframes in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.date {
+  font: 600 clamp(1.2rem, 3vw, 1.7rem) var(--serif);
+  letter-spacing: .3em;
+  color: var(--gold);
+}
+
+.frame {
+  width: min(250px, 60vw);
+  aspect-ratio: 3 / 4;
+  margin: 1.6rem auto;
+  border-radius: 125px 125px 6px 6px;
+  border: 1px solid var(--gold);
+  padding: 8px;
+}
+
+.ph {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    var(--c1, var(--blush)),
+    var(--c2, var(--peach))
+  );
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--ink2);
+  font: 300 .72rem var(--sans);
+  width: 100%;
+  height: 100%;
+}
+
+.ph img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ph svg {
+  width: 46%;
+  opacity: .45;
+  color: var(--gold);
+}
+
+.ph small {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  opacity: .7;
+  padding: 0 8px;
+}
+
+.frame .ph {
+  border-radius: 117px 117px 2px 2px;
+}
+
+.scroll {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink2);
+  text-decoration: none;
+  font: 300 .75rem var(--sans);
+  letter-spacing: .25em;
+  margin-top: 1rem;
+}
+
+.scroll b {
+  width: 1px;
+  height: 38px;
+  background: var(--gold);
+  animation: dr 2s infinite;
+}
+
+@keyframes dr {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  51% {
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+/* =========================================
+   COUNTDOWN
+========================================= */
+
+#count {
+  background: linear-gradient(var(--blush), var(--lav));
+}
+
+.cd {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(.6rem, 3vw, 2rem);
+  margin-top: 2rem;
+}
+
+.cd div {
+  min-width: 78px;
+  text-align: center;
+  padding: 0 clamp(.4rem, 2vw, 1.4rem);
+}
+
+.cd div + div {
+  border-left: 1px solid var(--gold2);
+}
+
+.cd b {
+  display: block;
+  font: 400 clamp(2.4rem, 8vw, 4.4rem)/1 var(--serif);
+  color: var(--ink);
+}
+
+.cd span {
+  font: 300 .8rem var(--sans);
+  letter-spacing: .2em;
+}
+
+#cdmsg {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: var(--gold);
+}
+
+h2 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+}
+
+/* =========================================
+   WEDDING EVENTS
+========================================= */
+
+.ev {
+  background: var(--ivory);
+}
+
+.ev:nth-of-type(even) {
+  background: linear-gradient(var(--cream), var(--ivory));
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.ev.flip .txt {
+  order: 2;
+}
+
+.pic {
+  aspect-ratio: 4 / 5;
+  border-radius: 200px 200px 8px 8px;
+  border: 1px solid var(--gold2);
+  padding: 9px;
+}
+
+.pic .ph {
+  border-radius: 192px 192px 3px 3px;
+}
+
+.tag {
+  font: italic 1.3rem var(--serif);
+  color: var(--rose);
+}
+
+.det {
+  margin: 1.2rem 0;
+  display: grid;
+  gap: .15rem;
+}
+
+.det strong {
+  font: 600 1.35rem var(--serif);
+  color: var(--gold);
+}
+
+.quote {
+  font: italic 1.2rem/1.6 var(--serif);
+  color: var(--ink2);
+  max-width: 34em;
+}
+
+.loc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .88rem;
+  color: var(--ink2);
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gold2);
+}
+
+.loc svg {
+  width: 16px;
+  color: var(--rose);
+  flex: none;
+}
+
+
+.map {
+  margin-top: .9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--cream);
+  border: 1px solid var(--gold2);
+}
+
+.map span {
+  font-size: .85rem;
+  color: var(--ink2);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .6rem 1.4rem;
+  border: 1px solid var(--gold);
+  color: #fff;
+  background: var(--gold);
+  text-decoration: none;
+  font: 500 .85rem var(--sans);
+  letter-spacing: .15em;
+  border-radius: 2px;
+  transition: background .3s, color .3s;
+}
+
+.btn:hover {
+  background: transparent;
+  color: var(--gold);
+}
+
+.ev .pic,
+.ev .txt {
+  transition: opacity 1s, transform 1s;
+}
+
+.js .ev:not(.seen) .pic,
+.js .ev:not(.seen) .txt {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* =========================================
+   FORMAL INVITATION CARD
+========================================= */
+
+#invite {
+  background: #dfe6d3;
+  overflow: hidden;
+}
+
+.card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.2rem, 5vw, 3rem);
+  background: var(--ivory);
+  position: relative;
+  z-index: 4;
+  text-align: center;
+  border: 1px solid var(--gold);
+  outline: 1px solid var(--gold2);
+  outline-offset: -9px;
+}
+
+.card .nm {
+  font-size: clamp(1.8rem, 5.5vw, 3rem);
+  letter-spacing: .05em;
+  margin: .8rem 0;
+}
+
+/* =========================================
+   GALLERY
+========================================= */
+
+#gallery {
+  background: var(--ivory);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 150px;
+  gap: 12px;
+  margin-top: 2.5rem;
+}
+
+.grid button {
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: none;
+  transition: transform .5s;
+}
+
+.grid button:hover {
+  transform: scale(1.02);
+}
+
+.grid button:nth-child(1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.grid button:nth-child(4) {
+  grid-row: span 2;
+}
+
+.grid button:nth-child(6) {
+  grid-column: span 2;
+}
+
+/* =========================================
+   PHOTO LIGHTBOX
+========================================= */
+
+#lb {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(40, 20, 26, .88);
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+
+#lb.on {
+  display: grid;
+}
+
+#lb .box {
+  width: min(560px, 92vw);
+  height: min(80vh, 700px);
+  position: relative;
+}
+
+#lb .box .ph {
+  height: 100%;
+  border-radius: 8px;
+}
+
+#lb .x {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--ivory);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* =========================================
+   CLOSING SECTION
+========================================= */
+
+#close {
+  background: linear-gradient(
+    var(--ivory),
+    var(--blush) 60%,
+    var(--lav)
+  );
+  text-align: center;
+  min-height: 90svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+#close .fade {
+  transition: opacity 2s;
+  opacity: .15;
+}
+
+#close.seen .fade {
+  opacity: 1;
+}
+
+.big {
+  font: 400 clamp(3rem, 11vw, 7rem)/1 var(--script);
+  color: var(--rose);
+}
+
+footer {
+  padding: 2rem;
+  text-align: center;
+  font-size: .8rem;
+  color: var(--ink2);
+  background: var(--lav);
+}
+
+/* =========================================
+   RESPONSIVE LAYOUT
+========================================= */
+
+@media (max-width: 780px) {
+  #intro video {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .ev.flip .txt {
+    order: 0;
+  }
+
+  .pic {
+    max-width: 340px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .txt {
+    text-align: center;
+  }
+
+  .quote {
+    margin-inline: auto;
+  }
+
+  .loc,
+  .map {
+    justify-content: center;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 130px;
+  }
+
+  .grid button:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .grid button:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .garland {
+    opacity: .55;
+    width: 70px;
+  }
+
+  #hero {
+    padding-bottom: 110px;
+  }
+
+  .panel {
+    background-size: auto, 175px 205px;
+  }
+
+  .panel::before {
+    inset: 8px;
+  }
+
+  .panel::after {
+    inset: 12px;
+  }
+
+  #seal {
+    width: 140px;
+  }
+
+  #tap {
+    top: calc(50% + 91px);
+    font-size: .7rem;
+    letter-spacing: .27em;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY: REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .petal {
+    animation: none;
+    display: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+
+  #seal {
+    animation: none;
+  }
+}
+
+/* REPLACE THE CODE-GENERATED GREEN DESIGN WITH THE NEW ARTWORK */
+
+#doors {
+  background: #414a36;
+  overflow: hidden;
+}
+
+/* Remove the old decorative curtains */
+#doors .cur {
+  display: none;
+}
+
+/* Both panels display halves of the same image */
+#doors .panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 3;
+
+  background-image: url("../public/images/invitation-doors.png");
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+
+  transition: transform 2.1s cubic-bezier(.65, 0, .25, 1);
+  transition-delay: 0s;
+  will-change: transform;
+}
+
+#doors .panel.l {
+  left: 0;
+  background-position: left center;
+}
+
+#doors .panel.r {
+  right: 0;
+  background-position: right center;
+}
+
+/* Keep the image halves aligned until the user taps */
+#doors .panel::before {
+  display: none;
+}
+
+/* Opening animation */
+#doors.open .panel.l {
+  transform: translateX(-102%);
+}
+
+#doors.open .panel.r {
+  transform: translateX(102%);
+}
+
+/* Transparent button placed over the printed seal */
+#doors #seal {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: 50%;
+
+  width: 24vw;
+  height: 58vh;
+  min-width: 180px;
+  min-height: 240px;
+  max-width: 390px;
+  max-height: 540px;
+
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  animation: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide the click area while the doors open */
+#doors.open #seal {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+
+/* The new artwork already contains TAP TO OPEN */
+#doors #tap {
+  display: none !important;
+}
+
+/* Avoid adding a second border over the artwork */
+#doors .panel::after {
+  display: none;
+}
+
+/* Small screens */
+@media (max-width: 600px) {
+  #doors #seal {
+    width: 44vw;
+    height: 52vh;
+    min-width: 0;
+    min-height: 0;
+  }
+}
+
+/* =========================================
+   HERO SECTION — VISHARD & PRIYA
+   Responsive laptop and phone design
+========================================= */
+
+#hero.hero-cover {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0;
+  padding: 35px 5%;
+
+  overflow: hidden;
+  background: #f7ead8;
+  text-align: center;
+}
+
+/* Background image element */
+#hero.hero-cover .hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#hero.hero-cover .hero-background img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Remove decorations belonging to the old hero */
+#hero.hero-cover .drape,
+#hero.hero-cover .garland,
+#hero.hero-cover .val,
+#hero.hero-cover .bq,
+#hero.hero-cover .mandala {
+  display: none !important;
+}
+
+/* Ivory content panel */
+#hero.hero-cover .hero-card {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+
+  width: min(47%, 570px);
+  margin: 0 1% 0 0;
+  padding: clamp(24px, 3vw, 42px) clamp(20px, 3vw, 38px);
+
+  background: rgba(250, 243, 226, 0.97);
+  border: 1px solid #d5b779;
+  border-radius: 28px;
+  box-shadow: 0 10px 35px rgba(40, 24, 20, 0.14);
+
+  color: #4a3338;
+  text-align: center;
+}
+
+/* Family introduction heading */
+#hero.hero-cover .hero-pre {
+  margin: 0 0 22px;
+  color: #967b72;
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.22em;
+}
+
+/* Both names use the same elegant uppercase font */
+#hero.hero-cover .hero-name {
+  display: block;
+  margin: 0;
+
+  color: #563d3d;
+  font-family: var(--serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(29px, 3.2vw, 46px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0.025em;
+
+  overflow-wrap: anywhere;
+}
+
+/* Relationship to family */
+#hero.hero-cover .family-intro {
+  margin: 9px 0 2px;
+  color: #b48683;
+  font-family: var(--serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Parents' names */
+#hero.hero-cover .parent-names {
+  margin: 0;
+  color: #806963;
+  font-family: var(--serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Decorative separator */
+#hero.hero-cover .hero-ornament {
+  margin: 12px 0;
+  color: #bd9b5c;
+  font-family: Georgia, serif;
+  font-size: 27px;
+  line-height: 1;
+}
+
+/* Wedding invitation message */
+#hero.hero-cover .hero-message {
+  max-width: 370px;
+  margin: 22px auto 0;
+
+  color: #b98580;
+  font-family: var(--script, "Pinyon Script", cursive);
+  font-size: clamp(20px, 2vw, 27px);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Scroll indicator */
+#hero.hero-cover .hero-scroll {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+
+  margin: 20px 0 0;
+  color: #967b72;
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+}
+
+#hero.hero-cover .hero-scroll span {
+  display: block;
+  width: 1px;
+  height: 24px;
+  background: #bd9b5c;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (min-width: 601px) and (max-width: 900px) {
+  #hero.hero-cover {
+    padding: 25px 3%;
+  }
+
+  #hero.hero-cover .hero-card {
+    width: 54%;
+    margin-right: 0;
+    padding: 25px 20px;
+  }
+
+  #hero.hero-cover .hero-name {
+    font-size: clamp(27px, 4vw, 36px);
+  }
+}
+
+/* =========================================
+   MOBILE PHONES
+========================================= */
+
+@media (max-width: 600px) {
+  #hero.hero-cover {
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 20px 0;
+  }
+
+  #hero.hero-cover .hero-background img {
+    object-fit: fill;
+    object-position: center;
+  }
+
+  
+  #hero.hero-cover .hero-card {
+    width: 70%;
+    max-width: 360px;
+    margin: 0;
+    padding: 18px 12px;
+
+    transform: translateY(-190px);
+
+    border-radius: 23px;
+    box-shadow: none;
+}
+
+
+  #hero.hero-cover .hero-pre {
+    margin-bottom: 13px;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  #hero.hero-cover .hero-name {
+    font-size: clamp(22px, 6.2vw, 32px);
+    line-height: 1.12;
+    letter-spacing: 0.01em;
+  }
+
+  #hero.hero-cover .family-intro {
+    margin-top: 7px;
+    font-size: clamp(13px, 3.6vw, 16px);
+  }
+
+  #hero.hero-cover .parent-names {
+    font-size: clamp(11px, 3vw, 14px);
+    line-height: 1.4;
+  }
+
+  #hero.hero-cover .hero-ornament {
+    margin: 8px 0;
+    font-size: 22px;
+  }
+
+  #hero.hero-cover .hero-message {
+    margin-top: 14px;
+    font-size: clamp(17px, 4.5vw, 22px);
+    line-height: 1.35;
+  }
+
+  #hero.hero-cover .hero-scroll {
+    margin-top: 13px;
+    font-size: 8px;
+  }
+
+  #hero.hero-cover .hero-scroll span {
+    height: 18px;
+  }
+}
+
+/* Short phone screens */
+@media (max-width: 600px) and (max-height: 700px) {
+  #hero.hero-cover .hero-card {
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+
+  #hero.hero-cover .hero-pre {
+    margin-bottom: 8px;
+  }
+
+  #hero.hero-cover .hero-ornament {
+    margin: 5px 0;
+  }
+
+  #hero.hero-cover .hero-message {
+    margin-top: 9px;
+  }
+
+  #hero.hero-cover .hero-scroll {
+    margin-top: 8px;
+  }
+}
+
+
+/* =========================================
+   WEDDING COUNTDOWN — PHOTO BACKGROUND
+========================================= */
+
+#count {
+  position: relative;
+  overflow: hidden;
+
+  background-image: url("../public/images/gallery/countdown-desktop.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Soft cream overlay */
+#count::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(250, 241, 226, 0.25);
+  pointer-events: none;
+}
+
+/* Keep countdown content above the overlay */
+#count > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Phone background */
+@media (max-width: 600px) {
+  #count {
+    background-image: url("../public/images/gallery/countdown-phone.jpg");
+    background-position: center center;
+  }
+}
+
+/* =========================================
+   COUNTDOWN TEXT VISIBILITY — DESKTOP
+========================================= */
+
+#count {
+  background-color: #f8f0e5;
+  background-blend-mode: normal;
+}
+
+#count::before {
+  background: rgba(250, 244, 235, 0.48);
+}
+
+/* Keep countdown numbers and labels readable */
+#count h1,
+#count h2,
+#count h3,
+#count p,
+#count span,
+#count .countdown-item,
+#count .countdown-number,
+#count .countdown-label {
+  color: #35251f;
+}
+
+/* =========================================
+   MOBILE COUNTDOWN — SINGLE ROW
+========================================= */
+
+@media (max-width: 600px) {
+  #count {
+    background-position: center center;
+  }
+
+  #count .countdown,
+  #count .countdown-timer,
+  #count .countdown-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0;
+  }
+
+  #count .countdown-item {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 2px;
+    text-align: center;
+  }
+
+  #count .countdown-number {
+    font-size: clamp(22px, 6vw, 30px);
+    line-height: 1.2;
+  }
+
+  #count .countdown-label {
+    font-size: clamp(8px, 2.4vw, 11px);
+    letter-spacing: 2px;
+  }
+}
+
+
+/* =========================================
+   MEHENDI & HALDI — IMAGE ONLY
+========================================= */
+
+.mehendi-event {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 75vh;
+
+  /* Desktop image */
+  background-image: url("vishard-priya-wedding/public/images/gallery/mehendi-desktop.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+}
+
+/* Hide event text and other content */
+.mehendi-event .txt,
+.mehendi-event .pic {
+  display: none !important;
+}
+
+/* Mobile image */
+@media (max-width: 600px) {
+  .mehendi-event {
+    min-height: 72vh;
+    background-image: url("vishard-priya-wedding/public/images/gallery/mehendi-phone.jpg");
+    background-position: center center;
+  }
+}
+
+/* Keep the Mehendi image visible */
+#events .ev.mehendi-event {
+  background-image: url("vishard-priya-wedding/public/images/gallery/mehendi-desktop.jpg") !important;
+  background-color: transparent !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+@media (max-width: 600px) {
+  #events .ev.mehendi-event {
+    background-image: url("vishard-priya-wedding/public/images/gallery/mehendi-phone.jpg") !important;
+  }
+}
+
+/* =========================================
+   WEDDING INVITATION — BACKGROUND IMAGE
+========================================= */
+
+#invite {
+  background-image: url("vishard-priya-wedding/public/images/gallery/green-desktop.jpg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Mobile background */
+@media (max-width: 600px) {
+  #invite {
+    background-image: url("vishard-priya-wedding/public/images/gallery/green-phone.jpg") !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+/* MATA KI CHOWKI BACKGROUND VIDEO */
+
+.mata-chowki-event {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.mata-chowki-event .mata-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.mata-chowki-event .mata-video-desktop {
+  display: block;
+}
+
+.mata-chowki-event .mata-video-mobile {
+  display: none;
+}
+
+/* Soft overlay so the event text stays readable */
+.mata-chowki-event::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 250, 243, 0.48);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .mata-chowki-event .mata-video-desktop {
+    display: none;
+  }
+
+  .mata-chowki-event .mata-video-mobile {
+    display: block;
+  }
+
+  .mata-chowki-event .mata-bg-video {
+    object-position: center;
+  }
+}
+
+
+
+/* MATA KI CHOWKI — FULL-WIDTH RESPONSIVE VIDEO */
+
+.mata-video-section {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+}
+
+.mata-video-section .mata-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+  object-position: center;
+  background: #000;
+}
+
+/* GET DIRECTIONS BUTTON */
+
+.mata-video-section .mata-directions-btn {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 14px 24px;
+  border: 1px solid #ffffff;
+  border-radius: 0;
+  background: #d50065;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: none;
+  white-space: nowrap;
+
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.mata-video-section .mata-directions-btn:hover {
+  background: #b80055;
+  color: #ffffff;
+}
+
+@media (max-width: 700px) {
+  .mata-video-section {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mata-video-section .mata-video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .mata-video-section .mata-directions-btn {
+    bottom: 4%;
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+}
+
+/* MEHENDI & HALDI: RESPONSIVE MEDIA */
+
+.haldi-rasam-section {
+  position: relative;
+  width: 100%;
+  margin: 28px 0;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  line-height: 0;
+}
+
+.haldi-phone-video,
+.mehendi-laptop-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+}
+
+/* Laptop and desktop: show image */
+.haldi-phone-video {
+  display: none;
+}
+
+.mehendi-laptop-image {
+  display: block;
+}
+
+/* Phone: show video instead */
+@media (max-width: 700px) {
+  .haldi-rasam-section {
+    margin: 20px 0;
+  }
+
+  .haldi-phone-video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .mehendi-laptop-image {
+    display: none;
+  }
+}
+
+/* ENGAGEMENT CEREMONY: PHONE VIDEO */
+
+.engagement-phone-video-wrap {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  /* Hide all original engagement content on phones */
+  .engagement-event .engagement-laptop-content {
+    display: none !important;
+  }
+
+  .engagement-phone-video-wrap {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+    padding: 0;
+    overflow: hidden;
+    background: transparent;
+    line-height: 0;
+  }
+
+  .engagement-phone-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
+    background: transparent;
+  }
+
+  /* Transparent directions button */
+  .engagement-directions-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 5%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border: 1px solid silver;
+    border-radius: 24px;
+    background: transparent;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 5;
+  }
+
+  .engagement-directions-btn:hover,
+  .engagement-directions-btn:focus-visible {
+    background: transparent;
+    color: #fff;
+    border-color: #e5e5e5;
+  }
+}
+
+/* Laptop: preserve the existing engagement design */
+@media (min-width: 701px) {
+  .engagement-phone-video-wrap {
+    display: none !important;
+  }
+
+  .engagement-event .engagement-laptop-content {
+    display: flex;
+  }
+}
+/* ENGAGEMENT CEREMONY — PHONE */
+@media (max-width: 700px) {
+  .engagement-event {
+    background: transparent !important;
+    background-image: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .engagement-event .engagement-laptop-content {
+    display: none !important;
+  }
+
+  .engagement-phone-video-wrap {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    background: #000;
+    line-height: 0;
+  }
+
+  .engagement-phone-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
+    background: #000;
+  }
+}
+@media (max-width: 700px) {
+  .engagement-directions-btn {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 16px;
+    border: 1px solid silver;
+    border-radius: 22px;
+    background: transparent;
+    color: #fff;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 5;
+  }
+
+  .engagement-directions-btn[hidden] {
+    display: none !important;
+  }
+}
+@media (min-width: 701px) {
+  .engagement-event .engagement-laptop-content {
+    display: flex;
+  }
+
+  .engagement-event .engagement-laptop-content .pic {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .engagement-event .engagement-laptop-content .pic img {
+    display: block;
+    width: 100%;
+    height: auto;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .engagement-phone-video-wrap {
+    display: none !important;
+  }
+}
+
+/* WEDDING CEREMONY: PHONE VIDEO */
+.wedding-phone-video-wrap {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .wedding-event {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    background-image: none !important;
+  }
+
+  .wedding-event .wedding-laptop-content {
+    display: none !important;
+  }
+
+  .wedding-phone-video-wrap {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+    line-height: 0;
+  }
+
+  .wedding-phone-video {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .wedding-directions-btn {
+    position: absolute;
+    left: 50%;
+    top: 56%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: 1px solid #d4af37;
+    border-radius: 24px;
+    background: transparent;
+    color: #d4af37;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 1.3;
+    z-index: 5;
+  }
+
+  .wedding-directions-btn:hover,
+  .wedding-directions-btn:focus-visible {
+    background: transparent;
+    color: #f1d675;
+    border-color: #f1d675;
+  }
+}
+
+@media (min-width: 701px) {
+  .wedding-phone-video-wrap {
+    display: none !important;
+  }
+
+  .wedding-event .wedding-laptop-content {
+    display: flex;
+  }
+}
+/* Space between countdown and Mata Ki Chowki */
+.mata-video-section {
+  margin-top: 40px !important;
+}

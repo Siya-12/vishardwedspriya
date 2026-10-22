@@ -1,0 +1,613 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>Vishard &amp; Priya — Wedding Invitation</title>
+  <meta name="description" content="Vishard Bansal and Priya Aggarwal joyfully invite you to celebrate the beginning of their forever.">
+
+  <meta property="og:title" content="Vishard &amp; Priya — Wedding Invitation">
+  <meta property="og:type" content="website">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Keep the existing invitation-door design -->
+  <style>
+    #doors {
+      --W: max(100vw, 177.6vh);
+      background: #414a36;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #doors .cur {
+      display: none !important;
+    }
+
+    #doors .panel {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      z-index: 3;
+      background-image: url("images/gallery/invitation-doors.png");
+      background-repeat: no-repeat;
+      background-size: 200% 100%;
+      transition: transform 2.1s ease;
+    }
+
+    #doors .panel.l {
+      left: 0;
+      background-position: left center;
+    }
+
+    #doors .panel.r {
+      right: 0;
+      background-position: right center;
+    }
+
+    #doors.open .panel.l {
+      transform: translateX(-102%);
+    }
+
+    #doors.open .panel.r {
+      transform: translateX(102%);
+    }
+
+    #doors .panel::before,
+    #doors .panel::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    #doors #seal {
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      left: 50%;
+      width: clamp(230px, 23vw, 390px);
+      height: clamp(300px, 58vh, 540px);
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      animation: none !important;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #doors.open #seal {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(.94);
+      transition: opacity .35s ease, transform .45s ease;
+      animation: none !important;
+    }
+
+    #doors #tap {
+      display: none !important;
+    }
+
+    @media (max-width: 600px) {
+      #doors #seal {
+        width: 46vw;
+        height: 52vh;
+        min-width: 0;
+        min-height: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #doors .panel {
+        transition-duration: .1s;
+      }
+    }
+  </style>
+
+  <!-- New responsive hero design -->
+  <style>
+    #hero.hero-cover {
+      position: relative !important;
+      isolation: isolate;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      width: 100% !important;
+      min-height: 100vh !important;
+      min-height: 100svh !important;
+      box-sizing: border-box;
+      padding: 35px 5% !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      background: #f7ead8 !important;
+    }
+
+    #hero.hero-cover .hero-background {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    #hero.hero-cover .hero-background img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    #hero.hero-cover .drape,
+    #hero.hero-cover .val,
+    #hero.hero-cover .bq,
+    #hero.hero-cover .mandala {
+      display: none !important;
+    }
+
+    #hero.hero-cover .hero-card {
+      position: relative;
+      z-index: 2;
+      box-sizing: border-box;
+      width: min(47%, 570px);
+      margin: 0 1% 0 0;
+      padding: clamp(24px, 3vw, 42px) clamp(20px, 3vw, 38px);
+      border: 1px solid #d5b779;
+      border-radius: 28px;
+      background: rgba(250, 243, 226, .97);
+      box-shadow: 0 10px 35px rgba(40, 24, 20, .14);
+      color: #4a3338;
+      text-align: center;
+    }
+
+    #hero.hero-cover .hero-pre {
+      margin: 0 0 22px;
+      color: #967b72;
+      font-family: "Jost", sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: .22em;
+    }
+
+    #hero.hero-cover .person-block {
+      margin: 0;
+    }
+
+    #hero.hero-cover .hero-name {
+      display: block;
+      margin: 0;
+      color: #563d3d;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(29px, 3.2vw, 46px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: .025em;
+      overflow-wrap: anywhere;
+    }
+
+    #hero.hero-cover .family-intro {
+      margin: 9px 0 2px;
+      color: #b48683;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 17px;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    #hero.hero-cover .parent-names {
+      margin: 0;
+      color: #806963;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    #hero.hero-cover .hero-ornament {
+      margin: 12px 0;
+      color: #bd9b5c;
+      font-family: Georgia, serif;
+      font-size: 27px;
+      line-height: 1;
+    }
+
+    #hero.hero-cover .hero-message {
+      max-width: 370px;
+      margin: 22px auto 0;
+      color: #b98580;
+      font-family: "Pinyon Script", cursive;
+      font-size: clamp(20px, 2vw, 27px);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    #hero.hero-cover .hero-scroll {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      margin: 20px 0 0;
+      color: #967b72;
+      font-family: "Jost", sans-serif;
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-decoration: none;
+    }
+
+    #hero.hero-cover .hero-scroll span {
+      display: block;
+      width: 1px;
+      height: 24px;
+      background: #bd9b5c;
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      #hero.hero-cover {
+        padding: 25px 3% !important;
+      }
+
+      #hero.hero-cover .hero-card {
+        width: 54%;
+        margin-right: 0;
+        padding: 25px 20px;
+      }
+
+      #hero.hero-cover .hero-name {
+        font-size: clamp(27px, 4vw, 36px);
+      }
+    }
+
+    /* Mobile-first hero layout */
+    @media (max-width: 600px) {
+      #hero.hero-cover {
+        justify-content: center !important;
+        align-items: center !important;
+        min-height: 100vh !important;
+        min-height: 100svh !important;
+        padding: 20px 0 !important;
+      }
+
+      #hero.hero-cover .hero-background img {
+        object-fit: fill;
+        object-position: center;
+      }
+
+      #hero.hero-cover .hero-card {
+        width: 70%;
+        max-width: 360px;
+        margin: 0;
+        padding: 18px 12px;
+        border-radius: 23px;
+        box-shadow: none;
+      }
+
+      #hero.hero-cover .hero-pre {
+        margin-bottom: 13px;
+        font-size: 8px;
+        letter-spacing: .12em;
+      }
+
+      #hero.hero-cover .hero-name {
+        font-size: clamp(22px, 6.2vw, 32px);
+        line-height: 1.12;
+        letter-spacing: .01em;
+      }
+
+      #hero.hero-cover .family-intro {
+        margin-top: 7px;
+        font-size: clamp(13px, 3.6vw, 16px);
+      }
+
+      #hero.hero-cover .parent-names {
+        font-size: clamp(11px, 3vw, 14px);
+        line-height: 1.4;
+      }
+
+      #hero.hero-cover .hero-ornament {
+        margin: 8px 0;
+        font-size: 22px;
+      }
+
+      #hero.hero-cover .hero-message {
+        margin-top: 14px;
+        font-size: clamp(17px, 4.5vw, 22px);
+        line-height: 1.35;
+      }
+
+      #hero.hero-cover .hero-scroll {
+        margin-top: 13px;
+        font-size: 8px;
+      }
+
+      #hero.hero-cover .hero-scroll span {
+        height: 18px;
+      }
+    }
+
+    @media (max-width: 600px) and (max-height: 700px) {
+      #hero.hero-cover .hero-card {
+        padding-top: 11px;
+        padding-bottom: 11px;
+      }
+
+      #hero.hero-cover .hero-pre {
+        margin-bottom: 8px;
+      }
+
+      #hero.hero-cover .hero-ornament {
+        margin: 5px 0;
+      }
+
+      #hero.hero-cover .hero-message {
+        margin-top: 9px;
+      }
+
+      #hero.hero-cover .hero-scroll {
+        margin-top: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body class="lock">
+
+  <!-- SVG DEFINITIONS -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="lotus" viewBox="0 0 100 70">
+        <g fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M50 62C38 50 38 28 50 6c12 22 12 44 0 56z"/>
+          <path d="M50 62C30 58 14 44 10 24c18 2 34 16 40 38z"/>
+          <path d="M50 62C70 58 86 44 90 24 72 26 56 40 50 62z"/>
+          <path d="M50 64C28 66 8 58 2 44c16-4 34 2 48 20z"/>
+          <path d="M50 64c22 2 42-6 48-20-16-4-34 2-48 20z"/>
+        </g>
+      </symbol>
+
+      <symbol id="mandala" viewBox="0 0 200 200">
+        <g fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="100" cy="100" r="96"/>
+          <circle cx="100" cy="100" r="70"/>
+          <circle cx="100" cy="100" r="40"/>
+          <g id="p">
+            <path d="M100 4C88 30 88 52 100 76c12-24 12-46 0-72z"/>
+            <path d="M100 30C94 44 94 54 100 64c6-10 6-20 0-34z"/>
+          </g>
+          <use href="#p" transform="rotate(30 100 100)"/>
+          <use href="#p" transform="rotate(60 100 100)"/>
+          <use href="#p" transform="rotate(90 100 100)"/>
+          <use href="#p" transform="rotate(120 100 100)"/>
+          <use href="#p" transform="rotate(150 100 100)"/>
+          <use href="#p" transform="rotate(180 100 100)"/>
+          <use href="#p" transform="rotate(210 100 100)"/>
+          <use href="#p" transform="rotate(240 100 100)"/>
+          <use href="#p" transform="rotate(270 100 100)"/>
+          <use href="#p" transform="rotate(300 100 100)"/>
+          <use href="#p" transform="rotate(330 100 100)"/>
+        </g>
+      </symbol>
+
+      <symbol id="bq" viewBox="0 0 200 130">
+        <g fill="#8fa383">
+          <ellipse cx="40" cy="95" rx="12" ry="30" transform="rotate(-50 40 95)"/>
+          <ellipse cx="80" cy="85" rx="11" ry="32" transform="rotate(-15 80 85)"/>
+          <ellipse cx="125" cy="90" rx="11" ry="30" transform="rotate(25 125 90)"/>
+          <ellipse cx="165" cy="105" rx="10" ry="26" transform="rotate(60 165 105)"/>
+          <ellipse cx="60" cy="110" rx="9" ry="24" transform="rotate(-80 60 110)"/>
+        </g>
+        <g>
+          <circle cx="70" cy="95" r="24" fill="#e8c2b8"/>
+          <circle cx="70" cy="95" r="15" fill="#f1d3ca"/>
+          <circle cx="70" cy="95" r="7" fill="#d9a89c"/>
+          <circle cx="120" cy="100" r="20" fill="#f6e9d9"/>
+          <circle cx="120" cy="100" r="12" fill="#fff7ea"/>
+          <circle cx="120" cy="100" r="5" fill="#e6cfae"/>
+          <circle cx="30" cy="112" r="12" fill="#f3dccf"/>
+          <circle cx="160" cy="118" r="11" fill="#e8c2b8"/>
+          <circle cx="95" cy="70" r="9" fill="#f6e9d9"/>
+          <circle cx="148" cy="80" r="7" fill="#f3dccf"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- FALLING PETALS -->
+  <div id="petals" aria-hidden="true"></div>
+
+  <!-- INTRO VIDEO -->
+  <div id="intro" role="dialog" aria-label="Wedding introduction">
+    <video
+      id="vid"
+      muted
+      playsinline
+      preload="auto"
+      src="public/videos/wedding-intro.mp4">
+    </video>
+    <button id="skip" type="button">SKIP</button>
+  </div>
+
+  <!-- INVITATION DOORS -->
+  <div id="doors" aria-label="Wedding invitation doors">
+    <div class="cur l" aria-hidden="true"></div>
+    <div class="cur r" aria-hidden="true"></div>
+    <div class="panel l" aria-hidden="true"></div>
+    <div class="panel r" aria-hidden="true"></div>
+    <button
+      id="seal"
+      type="button"
+      aria-label="Tap to open the wedding invitation">
+    </button>
+  </div>
+
+  <!-- TRANSITION FLASH -->
+  <div id="flash"></div>
+
+  <!-- MUSIC CONTROLS -->
+  <div id="music" aria-label="Music controls">
+    <button id="pp" type="button" aria-label="Pause music">❚❚</button>
+    <div class="eq" aria-hidden="true"><i></i><i></i><i></i></div>
+    <button id="mu" type="button" aria-label="Mute music">♪</button>
+    <button id="pt" type="button" aria-label="Turn petals off" title="Petals">✿</button>
+  </div>
+
+  <!-- MAIN WEDDING WEBSITE -->
+  <main id="main">
+
+    <!-- HERO: VISHARD AND PRIYA -->
+    <section id="hero" class="hero-cover">
+
+      <!-- The browser selects the landscape or phone image -->
+      <picture class="hero-background">
+        <source
+          media="(max-width: 600px)"
+          srcset="public/images/gallery/hero-phone.png">
+        <img
+          src="public/images/gallery/hero-landscape.png"
+          alt="hi"
+          fetchpriority="high">
+      </picture>
+
+      <div class="hero-card">
+
+        <p class="hero-pre">TOGETHER WITH OUR FAMILIES</p>
+
+        <div class="person-block">
+          <h1 class="hero-name">VISHARD BANSAL</h1>
+          <p class="family-intro">Son of</p>
+          <p class="parent-names">Satish Kumar Bansal and Kiran Bansal</p>
+        </div>
+
+        <div class="hero-ornament" aria-hidden="true">❦</div>
+
+        <div class="person-block">
+          <h2 class="hero-name">PRIYA AGGARWAL</h2>
+          <p class="family-intro">Daughter of</p>
+          <p class="parent-names">Suresh Aggarwal and Pushpa Aggarwal</p>
+        </div>
+
+        <p class="hero-message">
+          Joyfully invite you to celebrate the beginning of their forever
+        </p>
+
+        <a class="hero-scroll" href="#count">
+          SCROLL TO EXPLORE
+          <span aria-hidden="true"></span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section id="count" class="center">
+      <div class="wrap">
+        <svg width="64" viewBox="0 0 100 70" style="color:var(--gold)" aria-hidden="true">
+          <use href="#lotus"/>
+        </svg>
+
+        <h2>Counting down to forever</h2>
+
+        <div class="cd" id="cd" role="timer" aria-live="off">
+          <div><b id="d">--</b><span>DAYS</span></div>
+          <div><b id="h">--</b><span>HOURS</span></div>
+          <div><b id="m">--</b><span>MINUTES</span></div>
+          <div><b id="s">--</b><span>SECONDS</span></div>
+        </div>
+
+        <p id="cdmsg" class="script" hidden>
+          Today is the day — we are married!
+        </p>
+      </div>
+    </section>
+
+    <!-- WEDDING EVENTS: RENDERED BY main.js -->
+    <div id="events"></div>
+
+    <!-- INVITATION MESSAGE -->
+    <section id="invite" class="center">
+      <svg
+        class="mandala"
+        style="top:50%;left:50%;transform:translate(-50%,-50%);width:min(900px,140vw)"
+        aria-hidden="true">
+        <use href="#mandala"/>
+      </svg>
+
+      <div class="card">
+        <svg width="56" viewBox="0 0 100 70" style="color:var(--gold)" aria-hidden="true">
+          <use href="#lotus"/>
+        </svg>
+
+        <p class="quote" style="margin-inline:auto">
+          With immense joy and love, we invite you to join us in celebrating the wedding of
+        </p>
+
+        <h2 class="nm">
+          VISHARD BANSAL
+          <span class="script" style="font-size:1.3em;color:var(--gold)">&amp;</span>
+          PRIYA AGGARWAL
+        </h2>
+
+        <div class="rule">❖</div>
+
+        <p class="date" style="margin:0">24 NOVEMBER 2026</p>
+
+        <p class="quote" style="margin:1.4rem auto 0">
+          Your presence and blessings will make our special moments even more memorable.
+        </p>
+      </div>
+    </section>
+
+   
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="wrap center">
+    <h2>Moments &amp; Memories</h2>
+    <div class="rule">❖</div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+    <!-- CLOSING -->
+    <section id="close">
+      <div class="wrap fade">
+        <p class="script" style="font-size:1.6rem;margin:0">
+          With love and gratitude
+        </p>
+
+        <div class="big">Vishard &amp; Priya</div>
+        <div class="rule">❖</div>
+
+        <p class="quote" style="margin-inline:auto">
+          Two hearts. One journey. Forever begins here.
+        </p>
+
+        <p class="date">24 NOVEMBER 2026</p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>Made with love for Vishard &amp; Priya</footer>
+
+  </main>
+
+  <!-- GALLERY LIGHTBOX -->
+  <div id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div class="box">
+      <button class="x" type="button" aria-label="Close">✕</button>
+      <div class="ph" id="lbph"></div>
+    </div>
+  </div>
+
+  <!-- KEEP YOUR EXISTING JAVASCRIPT -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
