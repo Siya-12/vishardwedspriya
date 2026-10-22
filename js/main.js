@@ -884,18 +884,23 @@ function tick() {
 tick();
 setInterval(tick, 1000);
 
-/* GALLERY LIGHTBOX */
+
+/* GALLERY LIGHTBOX — SHOW FULL IMAGE */
 
 document.querySelectorAll('#grid button').forEach(button => {
   button.onclick = () => {
-    const phEl = button.querySelector('.ph');
+    const sourceImage = button.querySelector('.ph img');
+    if (!sourceImage) return;
 
-    $('#lbph').innerHTML = button.innerHTML;
+    const viewer = $('#lbph');
+    viewer.replaceChildren();
 
-    if (phEl) {
-      $('#lbph').style.cssText = phEl.getAttribute('style') || '';
-    }
+    const fullImage = new Image();
+    fullImage.src = sourceImage.currentSrc || sourceImage.src;
+    fullImage.alt = sourceImage.alt || 'Wedding memory';
+    fullImage.decoding = 'async';
 
+    viewer.appendChild(fullImage);
     $('#lb').classList.add('on');
     $('#lb .x').focus();
   };
@@ -918,3 +923,36 @@ addEventListener('keydown', e => {
     closeLb();
   }
 });
+
+
+/* DIRECTIONS BUTTONS — APPEAR AFTER 4 SECONDS AND STAY VISIBLE */
+
+function setupDirectionsButton(sectionSelector, buttonSelector) {
+  document.querySelectorAll(sectionSelector).forEach(section => {
+    const button = section.querySelector(buttonSelector);
+
+    if (!button || button.classList.contains('show-directions')) return;
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        // Stop observing once the section appears
+        observer.unobserve(section);
+
+        // Show the button after 4 seconds
+        setTimeout(() => {
+          button.classList.add('show-directions');
+        }, 4000);
+      });
+    }, { threshold: 0.15 });
+
+    observer.observe(section);
+  });
+}
+
+// Mata Ki Chowki
+setupDirectionsButton('.mata-video-section', '.mata-directions-btn');
+
+// Wedding Ceremony
+setupDirectionsButton('.wedding-event', '.wedding-directions-btn');

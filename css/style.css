@@ -2184,7 +2184,7 @@ footer {
   .wedding-directions-btn {
     position: absolute;
     left: 50%;
-    top: 56%;
+    top: 54%;
     transform: translate(-50%, -50%);
     display: inline-flex;
     align-items: center;
@@ -2207,8 +2207,8 @@ footer {
   .wedding-directions-btn:hover,
   .wedding-directions-btn:focus-visible {
     background: transparent;
-    color: #f1d675;
-    border-color: #f1d675;
+    color: #ebe1d2;
+    border-color: #eee3d2;
   }
 }
 
@@ -2224,4 +2224,61 @@ footer {
 /* Space between countdown and Mata Ki Chowki */
 .mata-video-section {
   margin-top: 40px !important;
+}
+/* Space between Engagement and Wedding Ceremony */
+.engagement-event {
+  margin-bottom: 40px;
+}
+
+/* Vertical gap before Wedding Ceremony */
+.wedding-event {
+  margin-top: 100px;
+}
+
+/* Add vertical space between Engagement and Wedding */
+@media (max-width: 700px) {
+  #events .engagement-event {
+    margin-bottom: 20px !important;
+  }
+
+  #events .wedding-event {
+    margin-top: 0 !important;
+  }
+}
+
+/* Laptop spacing */
+@media (min-width: 701px) {
+  #events .engagement-event {
+    margin-bottom: 60px !important;
+  }
+}
+
+
+/* Hide Wedding Directions button initially */
+.wedding-event .wedding-directions-btn {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+/* Show after 4 seconds */
+.wedding-event .wedding-directions-btn.show-directions {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Mata Ki Chowki — Hide directions button initially */
+.mata-video-section .mata-directions-btn {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.mata-video-section .mata-directions-btn.show-directions {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
