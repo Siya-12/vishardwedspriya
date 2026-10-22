@@ -712,7 +712,7 @@ function startVideo() {
 
 
 intro.addEventListener('pointerdown', startVideo);
-videoStartTimer = setTimeout(startVideo, 5000);
+videoStartTimer = setTimeout(startVideo, 1000);
 
 vid.addEventListener('ended', showInvitation);
 
