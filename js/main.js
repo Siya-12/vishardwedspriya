@@ -685,17 +685,25 @@ function showInvitation() {
   watch();
 }
 
+
 function startVideo() {
   if (videoStarted || invitationShown) return;
 
   videoStarted = true;
   clearTimeout(videoStartTimer);
 
+  // Start the music from the same tap that starts the video.
+  if (aud.paused) {
+    play();
+  }
+
+  // Start the intro video without waiting for the music.
   vid.play().catch(error => {
     console.warn('The intro video could not start:', error);
     videoStarted = false;
   });
 }
+
 
 intro.addEventListener('pointerdown', startVideo);
 videoStartTimer = setTimeout(startVideo, 5000);
