@@ -13,9 +13,25 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Cache version: update this value when publishing new assets. -->
+  <link rel="stylesheet" href="css/style.css?v=20261023-1">
 
-  <!-- Keep the existing invitation-door design -->
+  <!-- Preload only the hero image appropriate for the screen size. -->
+  <link
+    rel="preload"
+    as="image"
+    href="public/images/gallery/hero-phone.png?v=20261023-1"
+    media="(max-width: 600px)"
+    fetchpriority="high">
+
+  <link
+    rel="preload"
+    as="image"
+    href="public/images/gallery/hero-landscape.png?v=20261023-1"
+    media="(min-width: 601px)"
+    fetchpriority="high">
+
+  <!-- Existing invitation-door design -->
   <style>
     #doors {
       --W: max(100vw, 177.6vh);
@@ -34,7 +50,7 @@
       bottom: 0;
       width: 50%;
       z-index: 3;
-      background-image: url("images/gallery/invitation-doors.png");
+      background-image: url("images/gallery/invitation-doors.png?v=20261023-1");
       background-repeat: no-repeat;
       background-size: 200% 100%;
       transition: transform 2.1s ease;
@@ -111,7 +127,7 @@
     }
   </style>
 
-  <!-- New responsive hero design -->
+  <!-- Responsive hero design -->
   <style>
     #hero.hero-cover {
       position: relative !important;
@@ -428,8 +444,8 @@
       id="vid"
       muted
       playsinline
-      preload="auto"
-      src="public/videos/wedding-intro.mp4">
+      preload="metadata"
+      src="public/videos/wedding-intro.mp4?v=20261023-1">
     </video>
     <button id="skip" type="button">SKIP</button>
   </div>
@@ -464,14 +480,13 @@
     <!-- HERO: VISHARD AND PRIYA -->
     <section id="hero" class="hero-cover">
 
-      <!-- The browser selects the landscape or phone image -->
       <picture class="hero-background">
         <source
           media="(max-width: 600px)"
-          srcset="public/images/gallery/hero-phone.png">
+          srcset="public/images/gallery/hero-phone.png?v=20261023-1">
         <img
-          src="public/images/gallery/hero-landscape.png"
-          alt="hi"
+          src="public/images/gallery/hero-landscape.png?v=20261023-1"
+          alt="Vishard and Priya wedding invitation"
           fetchpriority="high">
       </picture>
 
@@ -564,16 +579,14 @@
       </div>
     </section>
 
-   
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="wrap center">
-    <h2>Moments &amp; Memories</h2>
-    <div class="rule">❖</div>
-
-    <div class="grid" id="grid"></div>
-  </div>
-</section>
+    <!-- GALLERY -->
+    <section id="gallery">
+      <div class="wrap center">
+        <h2>Moments &amp; Memories</h2>
+        <div class="rule">❖</div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
 
     <!-- CLOSING -->
     <section id="close">
@@ -606,8 +619,8 @@
     </div>
   </div>
 
-  <!-- KEEP YOUR EXISTING JAVASCRIPT -->
-  <script src="js/main.js"></script>
+  <!-- Versioned JavaScript to prevent stale cached code. -->
+  <script src="js/main.js?v=20261023-1" defer></script>
 
 </body>
 </html>
