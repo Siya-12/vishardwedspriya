@@ -621,6 +621,27 @@
 
   <!-- Versioned JavaScript to prevent stale cached code. -->
   <script src="js/main.js?v=20261023-1" defer></script>
+<!-- MOMENTS & MEMORIES PHOTO VIEWER -->
+<div id="photoViewer" class="photo-viewer" aria-hidden="true">
+
+  <button id="viewerClose" class="viewer-close" aria-label="Close photo">×</button>
+
+  <button id="viewerPrev" class="viewer-nav viewer-prev" aria-label="Previous photo">‹</button>
+
+  <div class="viewer-stage" id="viewerStage">
+    <img id="viewerImage" src="" alt="Wedding memory">
+  </div>
+
+  <button id="viewerNext" class="viewer-nav viewer-next" aria-label="Next photo">›</button>
+
+  <div class="viewer-tools">
+    <button id="viewerZoomOut" aria-label="Zoom out">−</button>
+    <span id="viewerZoomLevel">100%</span>
+    <button id="viewerZoomIn" aria-label="Zoom in">+</button>
+    <button id="viewerReset" aria-label="Reset zoom">Reset</button>
+  </div>
+
+</div>
 
 </body>
 </html>

@@ -2282,3 +2282,144 @@ footer {
   visibility: visible;
   pointer-events: auto;
 }
+/* =========================================
+   MOMENTS & MEMORIES PHOTO VIEWER
+========================================= */
+
+.photo-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(28, 20, 25, 0.96);
+  overflow: hidden;
+}
+
+.photo-viewer.active {
+  display: flex;
+}
+
+.viewer-stage {
+  position: absolute;
+  inset: 60px 60px 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+#viewerImage {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.photo-viewer.zoomed .viewer-stage {
+  display: block;
+}
+
+.photo-viewer.zoomed #viewerImage {
+  max-width: none;
+  max-height: none;
+}
+
+.viewer-close,
+.viewer-nav,
+.viewer-tools button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  cursor: pointer;
+}
+
+.viewer-close {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 32px;
+}
+
+.viewer-nav {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 56px;
+  border-radius: 24px;
+  font-size: 34px;
+}
+
+.viewer-prev {
+  left: 10px;
+}
+
+.viewer-next {
+  right: 10px;
+}
+
+.viewer-tools {
+  position: absolute;
+  z-index: 2;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  white-space: nowrap;
+}
+
+.viewer-tools button {
+  min-width: 38px;
+  min-height: 38px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 18px;
+}
+
+#viewerZoomLevel {
+  font-size: 13px;
+  min-width: 42px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .viewer-stage {
+    inset: 60px 12px 90px;
+  }
+
+  .viewer-prev {
+    left: 3px;
+  }
+
+  .viewer-next {
+    right: 3px;
+  }
+
+  .viewer-nav {
+    width: 34px;
+    height: 46px;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .viewer-tools {
+    bottom: 14px;
+    gap: 7px;
+  }
+}

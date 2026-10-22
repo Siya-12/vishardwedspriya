@@ -957,3 +957,152 @@ setupDirectionsButton('.mata-video-section', '.mata-directions-btn');
 
 // Wedding Ceremony
 setupDirectionsButton('.wedding-event', '.wedding-directions-btn');
+/* =========================================
+   MOMENTS & MEMORIES PHOTO VIEWER
+========================================= */
+
+(() => {
+  const viewer = document.getElementById('photoViewer');
+  const stage = document.getElementById('viewerStage');
+  const image = document.getElementById('viewerImage');
+  const zoomLabel = document.getElementById('viewerZoomLevel');
+
+  if (!viewer || !stage || !image) {
+    console.warn('Photo viewer HTML was not found.');
+    return;
+  }
+
+  let photos = [];
+  let currentIndex = 0;
+  let zoom = 1;
+  let startX = 0;
+  let startY = 0;
+
+  function collectPhotos() {
+    photos = [...document.querySelectorAll('#grid button')]
+      .map(button => {
+        const img = button.querySelector('img');
+
+        if (img && img.src) {
+          return img.currentSrc || img.src;
+        }
+
+        const holder = button.querySelector('[data-img]');
+        if (holder?.dataset.img) {
+          return holder.dataset.img;
+        }
+
+        return null;
+      })
+      .filter(Boolean);
+  }
+
+  function setZoom(value) {
+    zoom = Math.max(0.5, Math.min(4, value));
+
+    if (zoom <= 1) {
+      image.style.width = 'auto';
+      image.style.height = 'auto';
+      stage.scrollTo({ left: 0, top: 0 });
+    } else {
+      image.style.width = `${image.naturalWidth * zoom}px`;
+      image.style.height = `${image.naturalHeight * zoom}px`;
+    }
+
+    viewer.classList.toggle('zoomed', zoom > 1);
+    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+  }
+
+  function showPhoto(index) {
+    collectPhotos();
+
+    if (!photos.length) {
+      console.error('No gallery images were found.');
+      return;
+    }
+
+    currentIndex = (index + photos.length) % photos.length;
+    image.onload = () => {
+      setZoom(1);
+    };
+    image.onerror = () => {
+      console.error('Could not load gallery image:', image.src);
+    };
+    image.src = photos[currentIndex];
+    stage.scrollTo({ left: 0, top: 0 });
+  }
+
+  function openViewer(index) {
+    showPhoto(index);
+    viewer.classList.add('active');
+    viewer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeViewer() {
+    viewer.classList.remove('active');
+    viewer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    image.removeAttribute('src');
+    setZoom(1);
+  }
+
+  document.querySelectorAll('#grid button').forEach((button, index) => {
+    button.addEventListener('click', () => openViewer(index));
+  });
+
+  document.getElementById('viewerClose')
+    ?.addEventListener('click', closeViewer);
+
+  document.getElementById('viewerPrev')
+    ?.addEventListener('click', () => showPhoto(currentIndex - 1));
+
+  document.getElementById('viewerNext')
+    ?.addEventListener('click', () => showPhoto(currentIndex + 1));
+
+  document.getElementById('viewerZoomIn')
+    ?.addEventListener('click', () => setZoom(zoom + 0.25));
+
+  document.getElementById('viewerZoomOut')
+    ?.addEventListener('click', () => setZoom(zoom - 0.25));
+
+  document.getElementById('viewerReset')
+    ?.addEventListener('click', () => setZoom(1));
+
+  stage.addEventListener('wheel', event => {
+    if (!viewer.classList.contains('active')) return;
+
+    event.preventDefault();
+    setZoom(zoom + (event.deltaY < 0 ? 0.2 : -0.2));
+  }, { passive: false });
+
+  viewer.addEventListener('click', event => {
+    if (event.target === viewer) closeViewer();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (!viewer.classList.contains('active')) return;
+
+    if (event.key === 'Escape') closeViewer();
+    if (event.key === 'ArrowLeft') showPhoto(currentIndex - 1);
+    if (event.key === 'ArrowRight') showPhoto(currentIndex + 1);
+  });
+
+  // Allow finger swipes to change photos on phones.
+  stage.addEventListener('touchstart', event => {
+    if (zoom > 1 || event.touches.length !== 1) return;
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+  }, { passive: true });
+
+  stage.addEventListener('touchend', event => {
+    if (zoom > 1 || event.changedTouches.length !== 1) return;
+
+    const dx = event.changedTouches[0].clientX - startX;
+    const dy = event.changedTouches[0].clientY - startY;
+
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+      showPhoto(currentIndex + (dx < 0 ? 1 : -1));
+    }
+  }, { passive: true });
+})();
