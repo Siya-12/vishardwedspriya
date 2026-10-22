@@ -671,6 +671,11 @@ function showInvitation() {
   main.classList.add('on');
   music.classList.add('on');
 
+  // Start wedding background music after the intro video ends
+if (aud.paused) {
+  play();
+}
+
   doors.classList.remove('on');
   doors.classList.remove('open', 'draw', 'gone');
 
@@ -687,22 +692,21 @@ function showInvitation() {
 
 
 
-async function startVideo() {
+
+function startVideo() {
   if (videoStarted || invitationShown) return;
 
   videoStarted = true;
   clearTimeout(videoStartTimer);
 
-  // Start music immediately from the user's tap.
-  const musicPromise = aud.paused ? play() : Promise.resolve();
+  // Play only the intro video's own audio
+  vid.muted = false;
+  vid.volume = 1;
 
-  // Start the video from the same tap.
-  const videoPromise = vid.play().catch(error => {
+  vid.play().catch(error => {
     console.warn('Intro video could not start:', error);
     videoStarted = false;
   });
-
-  await Promise.allSettled([musicPromise, videoPromise]);
 }
 
 
@@ -778,21 +782,7 @@ aud.addEventListener('error', () => {
   console.error('Could not load the music file:', ASSETS.audio, aud.error);
 });
 
-function startOpeningMusic() {
-  if (aud.paused) {
-    play();
-  }
-}
 
-window.addEventListener('load', startOpeningMusic);
-
-document.addEventListener('pointerdown', function startMusicOnce() {
-  if (aud.paused) play();
-
-  if (!aud.paused) {
-    document.removeEventListener('pointerdown', startMusicOnce);
-  }
-});
 
 /* MUSIC PLAY/PAUSE */
 
