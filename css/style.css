@@ -2423,3 +2423,139 @@ footer {
     gap: 7px;
   }
 }
+
+/* Responsive layout safety overrides */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    overflow-x: clip;
+}
+
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+img,
+video,
+picture {
+    max-width: 100%;
+}
+
+#hero.hero-cover {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+}
+
+#hero .hero-background {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#hero .hero-background img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+@media screen and (max-width: 600px) {
+    #hero.hero-cover {
+        padding: 24px 16px !important;
+        min-height: 100vh !important;
+        min-height: 100svh !important;
+    }
+
+    #hero .hero-card {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+    }
+
+    #hero .hero-name {
+        font-size: clamp(1.5rem, 7vw, 2.4rem);
+        overflow-wrap: anywhere;
+    }
+
+    #hero .parent-names {
+        overflow-wrap: anywhere;
+    }
+
+    .wrap {
+        width: 100%;
+        max-width: 100%;
+        padding-inline: 16px;
+    }
+
+    #gallery .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    #gallery img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Desktop: show laptop content */
+@media (min-width: 701px) {
+  .haldi-phone-video,
+  .engagement-phone-video-wrap,
+  .wedding-phone-video-wrap {
+    display: none !important;
+  }
+
+  .mehendi-laptop-image,
+  .engagement-laptop-content,
+  .wedding-laptop-content {
+    display: flex;
+  }
+}
+
+/* Mobile: show phone videos */
+@media (max-width: 700px) {
+  .haldi-phone-video,
+  .engagement-phone-video-wrap,
+  .wedding-phone-video-wrap {
+    display: block !important;
+    width: 100%;
+  }
+
+  .haldi-phone-video,
+  .engagement-phone-video,
+  .wedding-phone-video,
+  .mata-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .mehendi-laptop-image,
+  .engagement-laptop-content,
+  .wedding-laptop-content {
+    display: none !important;
+  }
+
+  .engagement-phone-video-wrap,
+  .wedding-phone-video-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+}
