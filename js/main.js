@@ -21,16 +21,7 @@ const EV = [
     c: ['#fff3d6', '#f6d5d9'],
     img: 'mata-ki-chowki'
   },
-   {
-    n: 'Mehendi & Haldi',
-    d: '',
-    t: '',
-    v: '',
-    q: '',
-    u: 'https://maps.app.goo.gl/pkapjNJZWAG4f2WH7?g_st=ac',
-    c: ['#dfe9d3', '#fbe6a8'],
-    img: 'mehendi'
-  },
+  
   {
     n: 'Engagement Ceremony',
     d: 'Monday, 23 November 2026',
@@ -40,6 +31,16 @@ const EV = [
     u: 'https://maps.app.goo.gl/2hAoAVEQ13KkEuGm6',
     c: ['#e4daf0', '#e9bcc4'],
     img: 'engagement'
+  },
+   {
+    n: 'Mehendi & Haldi',
+    d: '',
+    t: '',
+    v: '',
+    q: '',
+    u: 'https://maps.app.goo.gl/pkapjNJZWAG4f2WH7?g_st=ac',
+    c: ['#dfe9d3', '#fbe6a8'],
+    img: 'mehendi'
   },
   {
     n: 'Wedding Ceremony',
@@ -53,16 +54,25 @@ const EV = [
   }
 ];
 
-/* PLACEHOLDER FUNCTION */
+
+/* IMAGE RENDERING FUNCTION */
 
 function ph(c, img, label) {
   return `
-    <div class="ph" style="--c1:${c[0]};--c2:${c[1]}" data-img="${img}">
-      <svg><use href="#lotus"></use></svg>
-      <small>${label}</small>
+    <div
+      class="ph"
+      style="--c1:${c[0]};--c2:${c[1]}"
+    >
+      <img
+        src="${img}"
+        alt="${label}"
+        loading="lazy"
+        onerror="this.style.display='none';"
+      />
     </div>
   `;
 }
+
 
 
 
@@ -100,34 +110,7 @@ $('#events').innerHTML = EV.map((e, i) => {
     `;
   }
 
-  // MEHENDI & HALDI: VIDEO ON PHONE, IMAGE ON LAPTOP
-  if (e.n === 'Mehendi & Haldi') {
-    return `
-      <section
-        class="haldi-rasam-section"
-        id="ev${i}"
-        aria-label="Mehendi and Haldi"
-      >
-        <video
-          class="haldi-phone-video"
-          src="public/videos/haldi-rasam.mp4"
-          muted
-          playsinline
-          autoplay
-          preload="metadata"
-          aria-label="Haldi Rasam video"
-        ></video>
-
-        <img
-          class="mehendi-laptop-image"
-          src="public/images/gallery/mehendi-desktop.jpg"
-          alt="Mehendi and Haldi celebration"
-        >
-      </section>
-    `;
-  }
-
- 
+  
   // ENGAGEMENT CEREMONY: PHONE VIDEO, EXISTING LAPTOP CONTENT
   if (e.n === 'Engagement Ceremony') {
     return `
@@ -184,16 +167,50 @@ $('#events').innerHTML = EV.map((e, i) => {
           </div>
 
           <div class="pic">
-            ${ph(
-              e.c,
-              'public/images/gallery/engagement.jpg',
-              'public/images/gallery/engagement.jpg'
-            )}
-          </div>
+  ${ph(
+    e.c,
+    '/images/gallery/1.jpg',
+    'Engagement Ceremony'
+  )}
+</div>
         </div>
       </section>
     `;
   }
+
+
+  // MEHENDI & HALDI: VIDEO ON PHONE, IMAGE ON LAPTOP
+
+  if (e.n === 'Mehendi & Haldi') {
+    return `
+      <section
+        class="haldi-rasam-section"
+        id="ev${i}"
+        aria-label="Mehendi and Haldi"
+      >
+
+        <video
+          class="haldi-phone-video"
+          muted
+          playsinline
+          preload="none"
+          data-src="/public/videos/haldi-rasam.mp4"
+          aria-label="Haldi Rasam video"
+        ></video>
+
+
+        <img
+          class="mehendi-laptop-image"
+          src="/images/gallery/mehendi-desktop.jpg"
+          alt="Mehendi and Haldi celebration"
+          loading="lazy"
+        >
+
+      </section>
+    `;
+  }
+
+
 
   // WEDDING CEREMONY: PHONE VIDEO, EXISTING LAPTOP CONTENT
   if (e.n === 'Wedding Ceremony') {
@@ -478,6 +495,129 @@ if (engagementVideo) {
     engagementObserver.observe(engagementSection);
   }
 }
+
+
+
+/* =========================================
+   MEHENDI & HALDI VIDEO
+   Play when visible, pause when away,
+   resume from the same position
+========================================= */
+
+const haldiVideo = document.querySelector('.haldi-phone-video');
+
+if (haldiVideo) {
+
+  const haldiSection = haldiVideo.closest('.haldi-rasam-section');
+
+  const haldiMobile = window.matchMedia('(max-width: 700px)');
+
+  let haldiFinished = false;
+
+  // Load the video only when needed.
+  function loadHaldiVideo() {
+
+    if (!haldiMobile.matches) return;
+
+    if (haldiVideo.getAttribute('src')) return;
+
+    const source = haldiVideo.dataset.src;
+
+    if (!source) {
+      console.error('Haldi video source is missing.');
+      return;
+    }
+
+    haldiVideo.src = source;
+    haldiVideo.load();
+
+  }
+
+  // Observe the Haldi section.
+  const haldiObserver = new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (!haldiMobile.matches) {
+          haldiVideo.pause();
+          return;
+        }
+
+        if (entry.isIntersecting && !haldiFinished) {
+
+          loadHaldiVideo();
+
+          // Do not restart a completed video.
+          if (haldiVideo.ended) {
+            haldiFinished = true;
+            return;
+          }
+
+          // Resume from the existing playback position.
+          if (haldiVideo.paused) {
+
+            haldiVideo.play().catch(error => {
+
+              console.warn(
+                'Haldi video could not start:',
+                error
+              );
+
+            });
+
+          }
+
+        } else {
+
+          // Pause without resetting currentTime.
+          haldiVideo.pause();
+
+        }
+
+      });
+
+    },
+    {
+      threshold: 0.5
+    }
+  );
+
+  // Stop permanently after the video has finished.
+  haldiVideo.addEventListener('ended', () => {
+
+    haldiFinished = true;
+
+    haldiVideo.pause();
+
+  });
+
+  // Handle switching between mobile and desktop.
+  haldiMobile.addEventListener('change', () => {
+
+    if (haldiMobile.matches) {
+
+      loadHaldiVideo();
+
+    } else {
+
+      haldiVideo.pause();
+
+    }
+
+  });
+
+  // Observe the section only on mobile.
+  if (haldiMobile.matches) {
+    loadHaldiVideo();
+  }
+
+  if (haldiSection) {
+    haldiObserver.observe(haldiSection);
+  }
+
+}
+
 
 /* WEDDING CEREMONY VIDEO: PHONE ONLY, PLAY ONCE */
 

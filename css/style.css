@@ -14,6 +14,9 @@
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Jost', system-ui, sans-serif;
   --script: 'Pinyon Script', 'Snell Roundhand', cursive;
+   /* --serif: "Cormorant Garamond", serif;
+  --script: "Great Vibes", cursive;
+  --sans: "Montserrat", sans-serif; */
 }
 
 *, *::before, *::after {
@@ -575,22 +578,465 @@ section {
   pointer-events: none;
 }
 
+
 /* =========================================
-   HERO SECTION
+   FINAL WEDDING HERO RESPONSIVE FIX
+   Desktop + Mobile
 ========================================= */
 
-#hero {
+#hero.hero-cover {
+  position: relative;
+  isolation: isolate;
+
   min-height: 100svh;
+  width: 100%;
+
   display: grid;
   place-items: center;
-  text-align: center;
-  background:
-    radial-gradient(ellipse at 50% 0, var(--peach), transparent 60%),
-    linear-gradient(var(--ivory), var(--blush) 140%);
+
+  box-sizing: border-box;
+
+  padding: 45px 20px;
+
   overflow: hidden;
-  padding-inline: max(1.2rem, 11vw);
-  padding-top: 90px;
+
+  background: #fff8ec;
 }
+
+/* Background image */
+
+#hero.hero-cover .hero-background {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: -2;
+}
+
+#hero.hero-cover .hero-background img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* Soft overlay */
+
+#hero.hero-cover::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: rgba(255, 248, 235, 0.18);
+
+  z-index: -1;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   HERO CARD
+========================================= */
+
+#hero.hero-cover .hero-card {
+  position: relative;
+
+  width: min(100%, 780px);
+
+  margin: 0 auto;
+
+  padding: 35px 32px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  background: rgba(255, 249, 238, 0.93);
+
+  border: 1px solid #c6a15d;
+
+  border-radius: 26px;
+
+  box-shadow:
+    0 12px 35px rgba(80, 48, 35, 0.12);
+}
+
+/* =========================================
+   HEADING
+========================================= */
+
+#hero.hero-cover .hero-pre {
+  font-family: var(--sans);
+
+  font-size: 0.78rem !important;
+
+  font-weight: 500;
+
+  letter-spacing: 0.18em;
+
+  line-height: 1.7;
+
+  color: #8f5b57 !important;
+
+  margin: 0 0 20px;
+}
+
+/* =========================================
+   BRIDE AND GROOM NAMES
+========================================= */
+
+#hero.hero-cover .hero-name {
+  font-family: var(--serif);
+
+  font-size: clamp(2rem, 4.2vw, 3.2rem) !important;
+
+  font-weight: 400;
+
+  line-height: 1.18;
+
+  letter-spacing: 0.025em;
+
+  color: #572b35 !important;
+
+  margin: 0 0 12px;
+
+  max-width: 100%;
+
+  overflow-wrap: normal;
+  word-break: normal;
+
+  text-wrap: balance;
+}
+
+/* Name blocks */
+
+#hero.hero-cover .person-block {
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 0 auto;
+}
+
+/* =========================================
+   SON OF / DAUGHTER OF
+========================================= */
+
+#hero.hero-cover .family-intro {
+  font-family: var(--script);
+
+  font-size: 1.5rem !important;
+
+  font-weight: 400;
+
+  line-height: 1.4;
+
+  color: #b87878 !important;
+
+  margin: 0 0 5px;
+}
+
+/* =========================================
+   PARENTS' NAMES
+========================================= */
+
+#hero.hero-cover .parent-names {
+  font-family: var(--serif);
+
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem) !important;
+
+  font-weight: 400;
+
+  line-height: 1.65;
+
+  letter-spacing: 0.01em;
+
+  color: #70464a !important;
+
+  margin: 0 auto;
+
+  max-width: 650px;
+
+  text-wrap: balance;
+}
+
+/* =========================================
+   ORNAMENT
+========================================= */
+
+#hero.hero-cover .hero-ornament {
+  font-family: var(--serif);
+
+  font-size: 2.2rem;
+
+  line-height: 1;
+
+  color: #b58a42 !important;
+
+  margin: 15px 0;
+}
+
+/* =========================================
+   INVITATION MESSAGE
+========================================= */
+
+#hero.hero-cover .hero-message {
+  font-family: var(--script);
+
+  font-size: clamp(1.65rem, 3.3vw, 2.3rem) !important;
+
+  font-weight: 400;
+
+  line-height: 1.45;
+
+  color: #a45f69 !important;
+
+  max-width: 650px;
+
+  margin: 22px auto;
+}
+
+/* =========================================
+   SCROLL TO EXPLORE
+========================================= */
+
+#hero.hero-cover .hero-scroll {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 9px;
+
+  font-family: var(--sans);
+
+  font-size: 0.72rem;
+
+  font-weight: 500;
+
+  letter-spacing: 0.18em;
+
+  color: #80524b !important;
+
+  text-decoration: none;
+
+  margin-top: 4px;
+}
+
+#hero.hero-cover .hero-scroll span {
+  display: block;
+
+  width: 1px;
+
+  height: 30px;
+
+  background: #b58a42;
+}
+
+
+/* =========================================
+   MOBILE HERO — WIDER & MORE COMPACT CARD
+========================================= */
+
+@media (max-width: 600px) {
+
+  #hero.hero-cover {
+    min-height: 100svh;
+    height: auto;
+
+    width: 100%;
+
+    padding:
+      max(12px, env(safe-area-inset-top))
+      8px
+      20px;
+
+    display: grid;
+
+    /* Keep the card near the top */
+    place-items: start center;
+
+    box-sizing: border-box;
+  }
+
+  /* Background photograph */
+
+  #hero.hero-cover .hero-background img {
+    object-position: center center;
+  }
+
+  /* Wider invitation card */
+
+  #hero.hero-cover .hero-card {
+    width: 96%;
+    max-width: 430px;
+
+    margin: 0 auto;
+
+    /* Reduce card height */
+    padding: 20px 16px;
+
+    box-sizing: border-box;
+
+    border-radius: 20px;
+
+    background: rgba(255, 249, 238, 0.95);
+
+    box-shadow:
+      0 8px 25px rgba(80, 48, 35, 0.10);
+  }
+
+  /* Top heading */
+
+  #hero.hero-cover .hero-pre {
+    font-size: 0.65rem !important;
+
+    letter-spacing: 0.12em;
+
+    line-height: 1.5;
+
+    margin: 0 0 12px;
+  }
+
+  /* Bride and groom names */
+
+  #hero.hero-cover .hero-name {
+    font-size: clamp(1.65rem, 6.2vw, 2.1rem) !important;
+
+    line-height: 1.15;
+
+    letter-spacing: 0.01em;
+
+    margin: 0 0 6px;
+
+    max-width: 100%;
+
+    text-wrap: balance;
+  }
+
+  /* Son of / Daughter of */
+
+  #hero.hero-cover .family-intro {
+    font-size: 1.2rem !important;
+
+    line-height: 1.3;
+
+    margin: 0 0 3px;
+  }
+
+  /* Parents' names */
+
+  #hero.hero-cover .parent-names {
+    font-size: clamp(1rem, 3.8vw, 1.15rem) !important;
+
+    line-height: 1.45;
+
+    letter-spacing: 0;
+
+    max-width: 100%;
+
+    padding-inline: 0;
+
+    color: #331c23 !important;
+
+    font-weight: bolder !important;
+
+    margin: 0 auto;
+  }
+
+  /* Ornament */
+
+  #hero.hero-cover .hero-ornament {
+    font-size: 1.7rem;
+
+    line-height: 1;
+
+    margin: 8px 0;
+  }
+
+  /* Invitation message */
+
+  #hero.hero-cover .hero-message {
+    font-size: clamp(1.4rem, 5.2vw, 1.7rem) !important;
+
+    line-height: 1.35;
+
+    margin: 14px auto;
+  }
+
+  /* Scroll to explore */
+
+  #hero.hero-cover .hero-scroll {
+    font-size: 0.62rem;
+
+    letter-spacing: 0.13em;
+
+    gap: 5px;
+
+    margin-top: 0;
+  }
+
+  #hero.hero-cover .hero-scroll span {
+    height: 20px;
+  }
+
+}
+
+
+/* =========================================
+   EXTRA SMALL MOBILE SCREENS
+========================================= */
+
+@media (max-width: 380px) {
+
+  #hero.hero-cover {
+    padding-inline: 6px;
+  }
+
+  #hero.hero-cover .hero-card {
+    width: 98%;
+
+    padding: 18px 12px;
+
+    border-radius: 18px;
+  }
+
+  #hero.hero-cover .hero-name {
+    font-size: 1.55rem !important;
+
+    line-height: 1.2;
+  }
+
+  #hero.hero-cover .parent-names {
+    font-size: 0.95rem !important;
+
+    line-height: 1.45;
+  }
+
+  #hero.hero-cover .hero-message {
+    font-size: 1.35rem !important;
+
+    line-height: 1.35;
+
+    margin: 12px auto;
+  }
+
+}
+
+
 
 .drape {
   position: absolute;
@@ -714,6 +1160,54 @@ section {
   border: 1px solid var(--gold);
   padding: 8px;
 }
+
+/* ENGAGEMENT CEREMONY — LAPTOP IMAGE */
+
+.pic {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  max-width: 360px;
+  min-width: 0;
+
+  border-radius: 200px 200px 8px 8px;
+  border: 1px solid var(--gold2);
+  padding: 9px;
+
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.pic .ph {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  border-radius: 192px 192px 3px 3px;
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    var(--c1),
+    var(--c2)
+  );
+}
+
+.pic .ph img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  border-radius: inherit;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
 
 .ph {
   position: relative;
@@ -2043,8 +2537,11 @@ footer {
   }
 }
 
-/* Laptop: preserve the existing engagement design */
+
+/* LAPTOP: ENGAGEMENT CEREMONY */
+
 @media (min-width: 701px) {
+
   .engagement-phone-video-wrap {
     display: none !important;
   }
@@ -2052,7 +2549,21 @@ footer {
   .engagement-event .engagement-laptop-content {
     display: flex;
   }
+
+  .engagement-event .engagement-laptop-content .pic {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .engagement-event .engagement-laptop-content .pic img {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
 }
+
 /* ENGAGEMENT CEREMONY — PHONE */
 @media (max-width: 700px) {
   .engagement-event {
