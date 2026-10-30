@@ -169,7 +169,7 @@ $('#events').innerHTML = EV.map((e, i) => {
           <div class="pic">
   ${ph(
     e.c,
-    '/images/gallery/1.jpg',
+    '/images/gallery/1.webp',
     'Engagement Ceremony'
   )}
 </div>
@@ -201,7 +201,7 @@ $('#events').innerHTML = EV.map((e, i) => {
 
         <img
           class="mehendi-laptop-image"
-          src="/images/gallery/mehendi-desktop.jpg"
+          src="/images/gallery/mehendi-desktop.webp"
           alt="Mehendi and Haldi celebration"
           loading="lazy"
         >
@@ -256,8 +256,8 @@ $('#events').innerHTML = EV.map((e, i) => {
           <div class="pic">
             ${ph(
               e.c,
-              'public/images/gallery/' + e.img + '.jpg',
-              'public/images/gallery/' + e.img + '.jpg'
+              'public/images/gallery/' + e.img + '.webp',
+              'public/images/gallery/' + e.img + '.webp'
             )}
           </div>
         </div>
@@ -307,8 +307,8 @@ $('#events').innerHTML = EV.map((e, i) => {
         <div class="pic">
           ${ph(
             e.c,
-            'public/images/gallery/' + e.img + '.jpg',
-            'public/images/gallery/' + e.img + '.jpg'
+            'public/images/gallery/' + e.img + '.webp',
+            'public/images/gallery/' + e.img + '.webp'
           )}
         </div>
       </div>
@@ -702,11 +702,11 @@ const gc = [
 $('#grid').innerHTML = gc.map((c, i) => {
   const imagePath = i === 6
     ? 'public/images/gallery/7.jpeg'
-    : 'public/images/gallery/' + (i + 1) + '.jpg';
+    : 'public/images/gallery/' + (i + 1) + '.webp';
 
   const fallbackPath = i === 6
     ? 'gallery/7.jpeg'
-    : 'gallery/' + (i + 1) + '.jpg';
+    : 'gallery/' + (i + 1) + '.webp';
 
   return `
     <button type="button" aria-label="Open photo ${i + 1}">
